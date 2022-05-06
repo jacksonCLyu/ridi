@@ -1,8 +1,6 @@
 package core
 
 import (
-	"fmt"
-
 	"github.com/jacksonCLyu/ridi-config/pkg/config"
 	"github.com/jacksonCLyu/ridi-faces/pkg/env"
 	"github.com/jacksonCLyu/ridi-log/log"
@@ -10,9 +8,9 @@ import (
 	"github.com/jacksonCLyu/ridi-utils/utils/rescueutil"
 )
 
-func Boot(opts ...Option) {
-	defer rescueutil.Recover(func(err any) {
-		fmt.Println(err)
+func Boot(opts ...Option) (bootErr error) {
+	defer rescueutil.Recover(func(e any) {
+		bootErr = e.(error)
 	})
 	// env init
 	errcheck.CheckAndPanic(env.Init())
@@ -21,6 +19,7 @@ func Boot(opts ...Option) {
 	for _, opt := range opts {
 		opt.apply(options)
 	}
+	return
 }
 
 func DefaultOptions() *options {
