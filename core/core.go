@@ -4,6 +4,7 @@ import (
 	"github.com/jacksonCLyu/ridi-config/pkg/config"
 	"github.com/jacksonCLyu/ridi-faces/pkg/env"
 	"github.com/jacksonCLyu/ridi-log/log"
+	"github.com/jacksonCLyu/ridi-utils/utils/assignutil"
 	"github.com/jacksonCLyu/ridi-utils/utils/errcheck"
 	"github.com/jacksonCLyu/ridi-utils/utils/rescueutil"
 )
@@ -14,13 +15,13 @@ func Boot(opts ...Option) (bootErr error) {
 	})
 	// env init
 	errcheck.CheckAndPanic(env.Init())
-	// options init
+	// default options
 	options := DefaultOptions()
 	for _, opt := range opts {
 		opt.apply(options)
 	}
 	// global config init
-	errcheck.CheckAndPanic(config.Init(config.WithConfigurable(options.configer)))
+	errcheck.CheckAndPanic(config.Init(config.WithConfigurable(assignutil.Assign(config.NewConfig(config.WithFilePath(options.configPath))))))
 	// global log init
 	errcheck.CheckAndPanic(log.Init(log.WithLogger(options.logger)))
 	return
@@ -30,7 +31,6 @@ func DefaultOptions() *options {
 	errcheck.CheckAndPanic(config.Init())
 	errcheck.CheckAndPanic(log.Init())
 	return &options{
-		configer: config.L(),
 		logger:   log.L(),
 	}
 }

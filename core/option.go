@@ -1,7 +1,6 @@
 package core
 
 import (
-	"github.com/jacksonCLyu/ridi-faces/pkg/configer"
 	"github.com/jacksonCLyu/ridi-faces/pkg/logger"
 )
 
@@ -10,7 +9,7 @@ type Option interface {
 }
 
 type options struct {
-	configer configer.Configurable
+	configPath string
 	logger   logger.Logger
 }
 
@@ -21,9 +20,9 @@ func (f applyFunc) apply(opts *options) {
 }
 
 // WithConfig sets the configer.
-func WithConfig(configer configer.Configurable) Option {
+func WithConfig(configPath string) Option {
 	return applyFunc(func(opts *options) {
-		opts.configer = configer
+		opts.configPath = configPath
 	})
 }
 
