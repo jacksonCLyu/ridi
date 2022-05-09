@@ -28,7 +28,6 @@ func Boot(opts ...Option) (bootErr error) {
 }
 
 func DefaultOptions() *options {
-	errcheck.CheckAndPanic(config.Init())
 	errcheck.CheckAndPanic(log.Init())
 	return &options{
 		logger:   log.L(),
