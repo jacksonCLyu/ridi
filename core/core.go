@@ -19,6 +19,10 @@ func Boot(opts ...Option) (bootErr error) {
 	for _, opt := range opts {
 		opt.apply(options)
 	}
+	// global config init
+	errcheck.CheckAndPanic(config.Init(config.WithConfigurable(options.configer)))
+	// global log init
+	errcheck.CheckAndPanic(log.Init(log.WithLogger(options.logger)))
 	return
 }
 
